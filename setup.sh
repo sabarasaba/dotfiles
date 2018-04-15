@@ -1,7 +1,7 @@
 #! /bin/bash
 
 echo "Install dependencies"
-suo pacman -S vim tmux dmenu ack dunst dconf rxvt-unicode i3-scrot i3exit nitrogen redshift
+suo pacman -S stow vim tmux dmenu ack dunst dconf rxvt-unicode i3-scrot i3exit nitrogen redshift
 
 echo "Symlink configs using stow.."
 stow bash
