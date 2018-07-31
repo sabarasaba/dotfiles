@@ -13,4 +13,6 @@ stow dmenu
 stow ack
 stow kitty
 
+sudo cp conky/conky_maia /usr/share/conky
+
 echo "All done !"
