@@ -17,6 +17,17 @@ URxvt*cursorBlink:                true
 URxvt*saveLines:                  5000
 URxvt.intensityStyles: false
 
+Xcursor.theme: xcursor-breeze
+Xcursor.size:                     0
+
+URxvt.perl-ext-common:  font-size, selection-to-clipboard, clipboard
+
+URxvt.clipboard.autocopy: true
+URxvt.clipboard.copycmd: xclip -in -selection clipboard
+
+URxvt.keysym.C-Up:     perl:font-size:increase
+URxvt.keysym.C-Down:   perl:font-size:decrease
+
 ! hard contrast: *background: #1d2021
 *background: #282828
 ! soft contrast: *background: #32302f
@@ -75,6 +86,3 @@ URxvt.color245: #928374
 URxvt.color246: #a89984
 URxvt.color248: #bdae93
 URxvt.color250: #d5c4a1
-
-Xcursor.theme: xcursor-breeze
-Xcursor.size:                     0

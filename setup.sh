@@ -11,5 +11,6 @@ stow tmux
 stow i3
 stow dmenu
 stow ack
+stow kitty
 
 echo "All done !"
