@@ -33,23 +33,17 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'vitalk/vim-simple-todo'
 Plug 'AndrewRadev/splitjoin.vim'
-Plug 'vim-scripts/YankRing.vim'
+"Plug 'vim-scripts/YankRing.vim'
 Plug 'vimwiki/vimwiki'
 Plug 'sbdchd/neoformat'
 Plug 'nelstrom/vim-visual-star-search'
 
-if has("gui_running")
-  set macligatures
-  set guifont=Fira\ Code:h12
-  Plug 'ctrlpvim/ctrlp.vim'
-else
-  Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
-  set rtp+=~/.fzf
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
-  " Setup FZF toggles
-  nnoremap <c-p> :Files<CR>
-  map <leader>b :Buffers<CR>
-endif
+" Setup FZF toggles
+nnoremap <c-p> :Files<CR>
+map <leader>b :Buffers<CR>
 
 " All of your Plugins must be added before the following line
 call plug#end()
@@ -65,6 +59,7 @@ autocmd BufNewFile,BufRead *.php   set nocursorline
 autocmd BufRead,BufNewFile *.conf setfiletype conf
 au BufRead,BufNewFile *.pss setfiletype css
 au BufRead,BufNewFile *.sss setfiletype css
+au FocusLost,WinLeave * :silent! w
 
 set laststatus=2
 set number            " Show line numbers
@@ -78,18 +73,22 @@ set colorcolumn=80
 set nobackup
 set noswapfile
 
+
 set t_Co=256
 set ttyfast " u got a fast terminal
 "set ttyscroll=3
 "set lazyredraw " to avoid scrolling problems
 
+
 set visualbell           " don't beep
 set noerrorbells         " don't beep
+set noeb vb t_vb=
 
 " Share clipboard with osx
-set clipboard=unnamedplus
+set clipboard=unnamed
 
 " Syntax coloring
+set synmaxcol=200
 syntax enable
 set background=dark
 let g:gruvbox_italic=1

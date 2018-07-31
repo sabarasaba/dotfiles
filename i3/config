@@ -80,14 +80,14 @@ bindsym $mod+7 workspace $ws7
 bindsym $mod+8 workspace $ws8
 
 # Move focused container to workspace
-bindsym $mod+Ctrl+1 move container to workspace $ws1
-bindsym $mod+Ctrl+2 move container to workspace $ws2
-bindsym $mod+Ctrl+3 move container to workspace $ws3
-bindsym $mod+Ctrl+4 move container to workspace $ws4
-bindsym $mod+Ctrl+5 move container to workspace $ws5
-bindsym $mod+Ctrl+6 move container to workspace $ws6
-bindsym $mod+Ctrl+7 move container to workspace $ws7
-bindsym $mod+Ctrl+8 move container to workspace $ws8
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
 
 # Open specific applications in floating mode
 for_window [title="alsamixer"] floating enable border pixel 1
@@ -97,7 +97,6 @@ for_window [class="Lxappearance"] floating enable sticky enable border normal
 for_window [class="Manjaro Settings Manager"] floating enable border normal
 for_window [class="Nitrogen"] floating enable sticky enable border normal
 for_window [class="Pamac-manager"] floating enable resize set 1600 800, move left 300px, move up 100px
-for_window [class="Skype"] floating enable border normal
 for_window [class="(?i)virtualbox"] floating enable border normal
 for_window [class="Gnome-calendar"] floating enable resize set 1300 1100, move left 300px, move up 200px
 
@@ -157,15 +156,18 @@ exec --no-startup-id nitrogen --restore
 exec --no-startup-id nm-applet
 exec --no-startup-id xfce4-power-manager
 exec --no-startup-id pamac-tray
+# exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+# exec --no-startup-id clipit
 # exec --no-startup-id blueman-applet
 exec --no-startup-id start_conky_maia
-exec --no-startup-id xautolock -time 10 -locker blurlock
 exec --no-startup-id redshift
 exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
 
 # remap capslock to esc
 exec --no-startup-id setxkbmap -option caps:escape
+# set compose key
+exec --no-startup-id setxkbmap -option compose:ralt
 # set keypress repeat speed
 exec --no-startup-id xset r rate 360 55
 # set natural scrolling
@@ -173,16 +175,22 @@ exec --no-startup-id xinput --set-prop "11" "libinput Natural Scrolling Enabled"
 # disable beep sound for backspace
 exec --no-startup-id xset b off
 
+# Sync clipboards
+# exec --no-startup-id /usr/bin/autocutsel -f -s PRIMARY
+# exec --no-startup-id /usr/bin/autocutsel -f -s CLIPBOARD
+# exec --no-startup-id /usr/bin/autocutsel -f -s SECONDARY
+
 
 bar {
-	i3bar_command i3bar
-	status_command i3status
-	position bottom
+        i3bar_command i3bar -t
+        status_command i3status
+        position bottom
+        height 50
 
-	bindsym button4 nop
-	bindsym button5 nop
-	font xft:Noto Sans 13.5
-	strip_workspace_numbers yes
+        bindsym button4 nop
+        bindsym button5 nop
+        font xft:Noto Sans 13.5
+        strip_workspace_numbers yes
 
     colors {
       background #3c3836

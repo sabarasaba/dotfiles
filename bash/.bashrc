@@ -59,7 +59,6 @@ alias free='free -m'                      # show sizes in MB
 alias np='nano -w PKGBUILD'
 alias more=less
 
-alias vim='gvim -v'
 alias vi='vim'
 alias ll='ls -lah'
 alias l='ls -lh'
@@ -79,8 +78,9 @@ alias gc="git c"
 alias ga="git add ."
 
 alias pbcopy='xsel --clipboard --input'
-alias server="python -m SimpleHTTPServer 3001"
+alias server="python3 -m http.server"
 alias gbc="git rev-parse --abbrev-ref HEAD | pbcopy"
+alias gnome-center="env XDG_CURRENT_DESKTOP=GNOME gnome-control-center"
 
 
 xhost +local:root > /dev/null 2>&1
@@ -137,4 +137,10 @@ source ~/.config/git-completion.bash
 # better yaourt colors
 export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
 
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
 export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
