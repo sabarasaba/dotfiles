@@ -3,13 +3,8 @@ call plug#begin('~/.vim/plugged')
 
 " the plugins I cant live without
 Plug 'morhetz/gruvbox'
-Plug 'janko-m/vim-test'
-Plug 'hauleth/blame.vim'
-Plug 'jremmen/vim-ripgrep'
 Plug 'mileszs/ack.vim'
 Plug 'rking/ag.vim'
-Plug 'mustache/vim-mustache-handlebars'
-Plug 'ewilazarus/preto'
 Plug 'mxw/vim-jsx'
 Plug 'Valloric/MatchTagAlways'
 Plug 'w0rp/ale'
@@ -19,15 +14,15 @@ Plug 'honza/vim-snippets'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-unimpaired'
 Plug 'jiangmiao/auto-pairs'
-Plug 'tpope/vim-sleuth'
+" Plug 'tpope/vim-sleuth'
 Plug 'easymotion/vim-easymotion'
 Plug 'mattn/emmet-vim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'scrooloose/nerdtree'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'bronson/vim-trailing-whitespace'
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
+" Plug 'MarcWeber/vim-addon-mw-utils'
+" Plug 'tomtom/tlib_vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -35,7 +30,6 @@ Plug 'vitalk/vim-simple-todo'
 Plug 'AndrewRadev/splitjoin.vim'
 "Plug 'vim-scripts/YankRing.vim'
 Plug 'vimwiki/vimwiki'
-Plug 'sbdchd/neoformat'
 Plug 'nelstrom/vim-visual-star-search'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -59,7 +53,6 @@ autocmd BufNewFile,BufRead *.php   set nocursorline
 autocmd BufRead,BufNewFile *.conf setfiletype conf
 au BufRead,BufNewFile *.pss setfiletype css
 au BufRead,BufNewFile *.sss setfiletype css
-au FocusLost,WinLeave * :silent! w
 
 set laststatus=2
 set number            " Show line numbers
@@ -73,6 +66,8 @@ set colorcolumn=80
 set nobackup
 set noswapfile
 
+set regexpengine=1
+
 
 set t_Co=256
 set ttyfast " u got a fast terminal
@@ -82,7 +77,7 @@ set ttyfast " u got a fast terminal
 
 set visualbell           " don't beep
 set noerrorbells         " don't beep
-set noeb vb t_vb=
+" set noeb vb t_vb=
 
 " Share clipboard with osx
 set clipboard=unnamed
@@ -174,7 +169,7 @@ endif
 nnoremap \ :Ack<SPACE>
 
 " Trigger git status from vim-fugitive
-nmap <leader>gs :Gstatus<cr>
+nmap <leader>gs :keepalt belowright 15Gstatus<cr>
 " Retabs the current buffer and fixes its indentation
 nmap <leader>fi :set et<cr>:retab<cr>
 " Custom mapping for easymotion
@@ -223,7 +218,7 @@ let g:mta_filetypes = {
 
 " Setup nerdtree
 map <leader>n :NERDTreeToggle<CR>
-let NERDTreeIgnore = ['\.pyc$', '\.rdb$', '\.DS_Store']
+let NERDTreeIgnore = ['\.pyc$', '\.rdb$', '\.DS_Store', '\node_modules']
 
 " Add an extra space after comment delimiter
 let g:NERDSpaceDelims = 1
@@ -236,6 +231,9 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " Create a custom JSON parsing command
 command JsonParse execute '%!python -m json.tool' | w
 map <leader>j JsonParse
+
+" Purge opened buffers
+command PurgeBuffers %bd|e#
 
 " Setup yarnk-ring
 let g:yankring_replace_n_pkey = '<C-n>'
@@ -261,3 +259,4 @@ map <leader>b :Buffers<CR>
 " gS at the beggining of the line will format code and tab code
 "   eg: const { h, b, c } = this.props
 "ctrl+n+b
+
