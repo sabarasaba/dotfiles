@@ -1,43 +1,36 @@
 " set the runtime path to include vim-plug and initialize
 call plug#begin('~/.vim/plugged')
 
-" the plugins I cant live without
-Plug 'morhetz/gruvbox'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'sonph/onehalf', {'rtp': 'vim/'}
+Plug 'sheerun/vim-polyglot'
 Plug 'mileszs/ack.vim'
 Plug 'rking/ag.vim'
-Plug 'mxw/vim-jsx'
-Plug 'Valloric/MatchTagAlways'
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 Plug 'tpope/vim-fugitive'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-unimpaired'
 Plug 'jiangmiao/auto-pairs'
-" Plug 'tpope/vim-sleuth'
-Plug 'easymotion/vim-easymotion'
+Plug 'tpope/vim-sleuth'
 Plug 'mattn/emmet-vim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'scrooloose/nerdtree'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'bronson/vim-trailing-whitespace'
-" Plug 'MarcWeber/vim-addon-mw-utils'
-" Plug 'tomtom/tlib_vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'vitalk/vim-simple-todo'
-Plug 'AndrewRadev/splitjoin.vim'
-"Plug 'vim-scripts/YankRing.vim'
 Plug 'vimwiki/vimwiki'
 Plug 'nelstrom/vim-visual-star-search'
-
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
-" Setup FZF toggles
-nnoremap <c-p> :Files<CR>
-map <leader>b :Buffers<CR>
+" Plug 'Valloric/MatchTagAlways'
+" Plug 'easymotion/vim-easymotion'
+" Plug 'vitalk/vim-simple-todo'
+" Plug 'AndrewRadev/splitjoin.vim'
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 " All of your Plugins must be added before the following line
 call plug#end()
@@ -46,13 +39,27 @@ filetype plugin indent on
 
 " Enable spellchecking for Markdown files and git commit messages
 autocmd FileType markdown setlocal spell
+autocmd FileType wiki setlocal spell
 autocmd FileType gitcommit setlocal spell
 autocmd FileType css,less,pss,sss set omnifunc=csscomplete#CompleteCSS
 autocmd BufNewFile,BufRead *.css   set syntax=css
-autocmd BufNewFile,BufRead *.php   set nocursorline
 autocmd BufRead,BufNewFile *.conf setfiletype conf
 au BufRead,BufNewFile *.pss setfiletype css
 au BufRead,BufNewFile *.sss setfiletype css
+
+" Theme
+if (has("termguicolors"))
+ let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+ set termguicolors
+endif
+
+syntax on
+set t_Co=256
+set ttyfast
+set cursorline
+colorscheme onehalfdark
+
 
 set laststatus=2
 set number            " Show line numbers
@@ -66,43 +73,24 @@ set colorcolumn=80
 set nobackup
 set noswapfile
 
-set regexpengine=1
-
-
-set t_Co=256
-set ttyfast " u got a fast terminal
-"set ttyscroll=3
-"set lazyredraw " to avoid scrolling problems
-
 
 set visualbell           " don't beep
 set noerrorbells         " don't beep
-" set noeb vb t_vb=
+set noeb vb t_vb=
 
 " Share clipboard with osx
 set clipboard=unnamed
 
-" Syntax coloring
-set synmaxcol=200
-syntax enable
-set background=dark
-let g:gruvbox_italic=1
-let g:gruvbox_termcolors=16
-let g:gruvbox_contrast_dark='medium'
-colorscheme gruvbox
 
 " Custom visual cues
 hi Visual cterm=NONE ctermbg=White ctermfg=Black
-hi Search ctermfg=Yellow ctermbg=NONE cterm=bold,underline
+hi Search ctermfg=Yellow ctermbg=NONE guifg=wheat guibg=red cterm=bold,underline
 hi MatchTag ctermfg=black ctermbg=lightgreen guifg=black guibg=lightgreen
 
 " Comments should be italic
 let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
 highlight Comment cterm=italic
-
-" Ignore comonly unused files
-set wildignore+=*/tmp/*,*/node_modules/*,*/frontend/node_modules/*,*/backend/node_modules/*,*.DS_Store,*.swp,*.zip     " MacOSX/Linux
 
 ""
 "" Whitespace
@@ -140,9 +128,6 @@ set splitright
 " Saner undo key
 noremap U <C-R>
 
-" Disable dict
-map <S-k> <Nop>
-
 " Sharing splits config with tmux
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -158,26 +143,8 @@ nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
 " Use , as leader key :D
 let mapleader = ","
 
-" Configure the silver searcher
-" let g:ag_prg="ag --ignore node_modules --ignore yarn.lock -i --column"
-" nnoremap \ :Ag<SPACE>
-" let g:rg_highlight=1
-" nnoremap \ :Rg<SPACE>--ignore-case<SPACE>
-if executable('ag')
-  let g:ackprg = 'ag --ignore-case --ignore yarn.lock --ignore-dir node_modules --vimgrep'
-endif
-nnoremap \ :Ack<SPACE>
-
-" Trigger git status from vim-fugitive
-nmap <leader>gs :keepalt belowright 15Gstatus<cr>
-" Retabs the current buffer and fixes its indentation
-nmap <leader>fi :set et<cr>:retab<cr>
-" Custom mapping for easymotion
-map s <Plug>(easymotion-s2)
-" Disable currently higlighted stuff
 map <leader><space> :noh<cr>
 
-set guioptions-=L
 
 ""
 "" Because Im stupid
@@ -193,11 +160,21 @@ set guioptions-=L
 :command Tabe tabe
 cnoreabbrev X x
 
-" Highlight closing tags for JSX
-highlight link xmlEndTag xmlTag
+" Setup nerdtree
+map <leader>n :NERDTreeToggle<CR>
+let NERDTreeIgnore = ['\.pyc$', '\.rdb$', '\.DS_Store']
 
-" JSX should not be required as an extension
-let g:jsx_ext_required = 0
+" Add an extra space after comment delimiter
+let g:NERDSpaceDelims = 1
+let g:NERDTreeIgnore = ['^node_modules$']
+nmap <leader>gs :Gstatus<cr>
+
+" Setup FZF toggles
+nnoremap <c-p> :Files<CR>
+map <leader>b :Buffers<CR>
+
+" Editor config
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 " Emmet setup
 let g:user_emmet_expandabbr_key = '<c-j>'
@@ -215,48 +192,25 @@ let g:mta_filetypes = {
 \ 'html' : 1,
 \}
 
+" Multiple cursors
+let g:multi_cursor_exit_from_visual_mode = 1
+let g:multi_cursor_exit_from_insert_mode = 1
 
-" Setup nerdtree
-map <leader>n :NERDTreeToggle<CR>
-let NERDTreeIgnore = ['\.pyc$', '\.rdb$', '\.DS_Store', '\node_modules']
+" Attempt to fix ale + multiple-cursors bug
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
 
-" Add an extra space after comment delimiter
-let g:NERDSpaceDelims = 1
+
+" Configure the rg searcher
+" nnoremap \ :Rg<ENTER>
+" let g:fzf_preview_window = ''
+if executable('ag')
+  let g:ackprg = 'ag --ignore-case --ignore yarn.lock --ignore-dir node_modules --vimgrep'
+endif
+nnoremap \ :Ack<SPACE>
 
 " Setup ultisnips and use tab as a completition key
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
-" Create a custom JSON parsing command
-command JsonParse execute '%!python -m json.tool' | w
-map <leader>j JsonParse
-
-" Purge opened buffers
-command PurgeBuffers %bd|e#
-
-" Setup yarnk-ring
-let g:yankring_replace_n_pkey = '<C-n>'
-let g:yankring_replace_n_nkey = '<C-b>'
-
-set guioptions-=r
-set guioptions-=r
-"set showtabline=0
-
-" yank directly into systems clipboard
-" noremap y "+yy
-" noremap p "+p
-
-
-" Setup FZF toggles
-nnoremap <c-p> :Files<CR>
-map <leader>b :Buffers<CR>
-
-" Paste indented ]p or ]P
-" fzf.vim ctrl-V will open in split
-" <C-n> and <C-b> will trigger yakn ring
-" <leader>-ww will trigger vimwiki
-" gS at the beggining of the line will format code and tab code
-"   eg: const { h, b, c } = this.props
-"ctrl+n+b
-
+let g:UltiSnipsSnippetDirectories=["~/.vim/custom_snippets"]
