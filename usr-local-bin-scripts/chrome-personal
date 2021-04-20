@@ -1,4 +1,0 @@
-#! /bin/bash
-
-#sh -c "export LANGUAGE=lt_LT.UTF-8 && /usr/bin/google-chrome-stable -profile-directory=Default"
-google-chrome-stable -profile-directory="Default"

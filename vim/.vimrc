@@ -4,6 +4,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'sheerun/vim-polyglot'
+Plug 'pantharshit00/vim-prisma'
 Plug 'mileszs/ack.vim'
 Plug 'rking/ag.vim'
 Plug 'dense-analysis/ale'

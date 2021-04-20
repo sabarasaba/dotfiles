@@ -6,4 +6,3 @@ TAB:menu-complete
 set show-all-if-ambiguous on
 set menu-complete-display-prefix on
 set colored-stats on
-set bell-style none

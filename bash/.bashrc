@@ -1,10 +1,23 @@
-#
-# ~/.bashrc
-#
+# This explains the difference between .profile, .bash_profile, and .bashrc--be sure to read the comments:
+# http://www.joshstaiger.org/archives/2005/07/bash_profile_vs.html
 
-[[ $- != *i* ]] && return
+# If on OS X:
+if [[ $OSTYPE == darwin* ]]; then
+    # Tell compilers we have a 64 bit architecture
+    export ARCHFLAGS="-arch x86_64"
+    # Ensure Homebrew binaries take precedence
+    export PATH=/usr/local/bin:/usr/local/sbin:"$PATH"
+fi
 
-[ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
+# Change the window title of X terminals
+case ${TERM} in
+	xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|interix|konsole*)
+		PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
+		;;
+	screen*)
+		PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
+		;;
+esac
 
 use_color=true
 
@@ -53,8 +66,6 @@ fi
 
 unset use_color safe_term match_lhs sh
 
-xhost +local:root > /dev/null 2>&1
-
 complete -cf sudo
 
 # Bash won't get SIGWINCH if another process is in the foreground.
@@ -62,47 +73,29 @@ complete -cf sudo
 # it regains control.  #65623
 # http://cnswww.cns.cwru.edu/~chet/bash/FAQ (E11)
 shopt -s checkwinsize
-
 shopt -s expand_aliases
 
 # Enable history appending instead of overwriting.  #139609
 shopt -s histappend
+shopt -s checkwinsize
+shopt -s expand_aliases
 
-#
-# # ex - archive extractor
-# # usage: ex <file>
-ex ()
-{
-  if [ -f $1 ] ; then
-    case $1 in
-      *.tar.bz2)   tar xjf $1   ;;
-      *.tar.gz)    tar xzf $1   ;;
-      *.bz2)       bunzip2 $1   ;;
-      *.rar)       unrar x $1     ;;
-      *.gz)        gunzip $1    ;;
-      *.tar)       tar xf $1    ;;
-      *.tbz2)      tar xjf $1   ;;
-      *.tgz)       tar xzf $1   ;;
-      *.zip)       unzip $1     ;;
-      *.Z)         uncompress $1;;
-      *.7z)        7z x $1      ;;
-      *)           echo "'$1' cannot be extracted via ex()" ;;
-    esac
-  else
-    echo "'$1' is not a valid file"
-  fi
-}
+# Typo fixer for cd..
+shopt -s cdspell
+# Case insensitive cd.
+bind 'set completion-ignore-case on'
 
-# better yaourt colors
-export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
+# CTRL-z bring back fg task
+stty susp undef
+# bind '"\C-z": "fg\015"'
+bind -x '"\C-z"':"fg"
 
-
-# export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!{.git,node_modules}/**"'
-export FZF_DEFAULT_COMMAND='ag --ignore-dir node_modules --ignore-case -g ""'
+export FZF_DEFAULT_COMMAND='rg --files --follow --hidden'
+# export FZF_DEFAULT_COMMAND='ag --ignore-dir node_modules --ignore-case -g ""'
+export NODE_OPTIONS=--max_old_space_size=4096
 
 export EDITOR=vim
 export GROUPS_ENABLED=true
-
 alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
@@ -114,7 +107,6 @@ alias ll='ls -lah'
 alias l='ls -lh'
 alias calc='bc -l'
 alias mkdir='mkdir -pv'
-alias screenfetch=' screenfetch -A "Arch Linux" -D "Arch Linux"'
 
 alias gd="git diff"
 alias gl="git lg"
@@ -128,54 +120,16 @@ alias gc="git c"
 alias ga="git add ."
 
 alias pbcopy='xsel --clipboard --input'
-alias server="python3 -m http.server"
+alias server="python -m http.server"
 alias gbc="git rev-parse --abbrev-ref HEAD | pbcopy"
-alias gnome-center="env XDG_CURRENT_DESKTOP=GNOME gnome-control-center"
 
-
-xhost +local:root > /dev/null 2>&1
-complete -cf sudo
-
-# Bash won't get SIGWINCH if another process is in the foreground.
-# Enable checkwinsize so that bash will check the terminal size when
-# it regains control.  #65623
-# http://cnswww.cns.cwru.edu/~chet/bash/FAQ (E11)
-shopt -s checkwinsize
-shopt -s expand_aliases
-
-# Enable history appending instead of overwriting.  #139609
-shopt -s histappend
-PROMPT_COMMAND='history -a'
-
-# Typo fixer for cd..
-shopt -s cdspell
-# Case insensitive cd.
-bind 'set completion-ignore-case on'
-
-# CTRL-z bring back fg task
-stty susp undef
-bind '"\C-z": "fg\015"'
-
-
-source ~/.bin/.bash-powerline.sh
-source /etc/profile.d/autojump.bash
-source ~/.bin/git-completion.bash
-
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
-
+# Sourcing
+[ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
+source ~/.bin/bash-powerline.sh
+source ~/.bin/git-completion.bash
+source /usr/share/autojump/autojump.bash
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-
-export PATH="$PATH:$HOME/.local/bin"
-
-export PATH="$PATH:$HOME/Android/Sdk"
-export PATH="$PATH:$HOME/Android/Sdk/tools"
-export PATH="$PATH:$HOME/Android/Sdk/tools/bin"
-export PATH="$PATH:$HOME/Android/Sdk/platform-tools"
-export PATH="$PATH:$HOME/Android/Sdk/emulator"
-
+export PATH=$PATH:$HOME/n/bin
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
