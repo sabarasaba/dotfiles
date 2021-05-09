@@ -23,8 +23,9 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'vimwiki/vimwiki'
 Plug 'nelstrom/vim-visual-star-search'
+set rtp+=/usr/local/opt/fzf
 Plug 'junegunn/fzf.vim'
-Plug 'SirVer/ultisnips'
+"Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 " Plug 'Valloric/MatchTagAlways'

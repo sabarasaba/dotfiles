@@ -18,16 +18,10 @@ tap 'homebrew/cask'
 cask_args appdir: '~/Applications', require_sha: true
 
 # good ol cask apps
-cask 'google-chrome'
-cask 'firefox'
 cask 'dropbox'
 cask 'kitty'
 cask 'skype'
-cask 'slack'
-cask 'spotify'
 cask 'iterm2'
-cask 'kap'
-cask 'little-snitch'
 
 # Command-not-found
 # this is used by prezto's command-not-found module:
