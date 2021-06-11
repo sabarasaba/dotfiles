@@ -24,9 +24,9 @@ configuration files (dotfiles) in this repo.
 1. Make hidden files/folder [visible in Finder](http://apple.stackexchange.com/questions/99213/is-it-possible-to-always-show-hidden-dotfiles-in-open-save-dialogs):
       `defaults write -g AppleShowAllFiles -bool true`
 
-2. `git clone git@github.com:jeffwidman/dotfiles.git ~/.dotfiles`
+2. `git clone git@github.com:sabarasaba/dotfiles.git ~/.dotfiles`
   - If cloning to a server without a Github-connected SSH key use 'https' instead:
-      `git clone https://github.com/jeffwidman/dotfiles.git ~/.dotfiles`
+      `git clone https://github.com/sabarasaba/dotfiles.git ~/.dotfiles`
 
 3. Install desired binaries using your favorite package manager:
   - If on OSX, use Homebrew:
@@ -39,28 +39,14 @@ configuration files (dotfiles) in this repo.
     1. Use [`rvm`](http://rvm.io/) instead of Homebrew. Much easier to manage
     gemsets, ruby versions, etc.
   - Node:
-    1. Use [`nvm`](https://github.com/creationix/nvm) instead of Homebrew for
+    1. Use [`n`](https://github.com/tj/n) instead of Homebrew for
     managing Node.
-    2. Install/upgrade [manually using `git`]
-    (https://github.com/creationix/nvm#manual-install) rather than `nvm`'s
-    `install.sh` script.
-    3. Unfortunately, `nvm` drastically slows shell startup time due to
-    https://github.com/creationix/nvm/issues/966, so after installing node
-    (`nvm install node`), run `nvm unalias default` to disable the alias. Just
-    remember to first run `nvm use node` whenever you want to run webpack, etc.
 
-4. Make ZSH the default shell:
+4. Make bash the default shell:
   1. `$ sudo vim /etc/shells`
-  2. Append the path to zsh - Homebrew sticks it in `/usr/local/bin/zsh`
+  2. Append the path to bash - Homebrew sticks it in `/usr/local/bin/bash`
   3. Save and exit
-  4. `$ chsh -s /usr/local/bin/zsh`
-
-5. Install Prezto:
-  `git clone --recursive git@github.com:sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"`
-
-  - The default Prezto instructions say to symlink the default config files.
-    **Don't do this**; instead use Stow to symlink your own config files (instructions below).
-  - To update Prezto: `git pull && git submodule update --init --recursive`
+  4. `$ chsh -s /usr/local/bin/bash`
 
 5. Now use `stow` to symlink the various config files:
   - `$ cd ~/.dotfiles/`
@@ -73,38 +59,10 @@ configuration files (dotfiles) in this repo.
      - http://kianmeng.org/blog/2014/03/08/using-gnu-stow-to-manage-your-dotfiles/
   - Several config files aren't `stow`able--review the list below
 
-6. Other apps I commonly install:
-  - [Visual Studio Code](https://code.visualstudio.com/) - be sure to [install the shell command `code`](https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line).
-  - [iTerm2](https://www.iterm2.com/downloads.html)
-  - [Cyberduck](https://cyberduck.io/?l=en)
-  - [PGAdmin](https://www.pgadmin.org/download/macosx.php) / [Postico](https://eggerapps.at/postico/)
-  - [MySQLWorkbench](http://dev.mysql.com/downloads/workbench/)
-  - [Robomongo](https://robomongo.org/)
-  - [SourceTree](https://www.sourcetreeapp.com/)
-  - [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
-  - [BetterTouchTool](https://boastr.net//)
-  - [OS X /etc/hosts GUI](https://github.com/specialunderwear/Hosts.prefpane)
-
-7. ZSH completion scripts:
-  Symlink any completion scripts into ``/usr/local/share/zsh/site-functions/``.
-  The filename must begin with an `_` or `zsh` will not read it. Prezto caches
-  the output of `compinit`, to rebuild the cache do: `rm -rf ~/.zcomp* && compinit`
-
-  Note: Many homebrew formula automatically handle installing the formula's
-  completion scripts. For example, `brew install the_silver_searcher`(`ag`)
-  will also install a completion script for `ag` in `/usr/local/share/zsh/site-functions/`.
-
-  Docker completion scripts - I opened https://github.com/sorin-ionescu/prezto/issues/1459 to try to get this into prezto:
-
-    ln -s /Applications/Docker.app/Contents/Resources/etc/docker.zsh-completion /usr/local/share/zsh/site-functions/_docker
-    ln -s /Applications/Docker.app/Contents/Resources/etc/docker-machine.zsh-completion /usr/local/share/zsh/site-functions/_docker-machine
-    ln -s /Applications/Docker.app/Contents/Resources/etc/docker-compose.zsh-completion /usr/local/share/zsh/site-functions/_docker-compose
-
 
 ---
 ##List of config files
 
- - VSCode - Settings are stowable, but extensions are purposefully excluded. At this time, there's no way to favorite/bookmark recommendations on the Visual Studio Marketplace. When there is, I'll start creating a list of the ones I use.
  - bash
  - git
  - Homebrew Brewfile - stowable, `brew bundle --global` will use $HOME/.Brewfile
@@ -115,65 +73,10 @@ configuration files (dotfiles) in this repo.
  - vim - for when Neovim isn't available
  - vimify - `.inputrc` and `.editrc` make vim commands work in many interactive
     shells, for example the mysql and postgres shells
- - zsh - includes prezto config files
-
 
 ---
-##Misc Notes:
 
-List of possible macOS customizations: https://mths.be/macos
-
-For themes, check out the [Base16 template system](https://github.com/chriskempson/base16). It includes templates for
-theming many different apps.
-
-Colorschemes that I like:
- - monokai
- - solarized
- - railscasts
-
-Fonts that I like:
- - Ubuntu Monospace including powerline fix
- - Adobe Source Code (look for powerline fix)
-
-
----
-##TODO:
-
- - add https://github.com/skwp/dotfiles/blob/master/ctags/ctags to make ctags parse ruby and js better
- - how to use ctags http://scholarslab.org/research-and-development/code-spelunking-with-ctags-and-vim/
-
- - Improve my vimrc and nvimrc - vim plugins:
-   - vim-markdown Markdown syntax highlighting for Vim
-   - syntastic (pylint, pep8, pyflakes linters)
-   - youcompleteme
-   - tasklist
-   - taglist (and ctags) (tagbar as alternative?)
-   - nerdtree
-   - powerline
-   - minibuffexplorer
-   - the_silver_searcher (vs ctrlp?)
-
- - add ipython (replaces python interpreter)
-
- - add powerline - used in vim, [zsh](http://powerline.readthedocs.org/en/latest/usage/shell-prompts.html), ipython, and tmux
-
- - gitignore add:
-    - https://github.com/github/gitignore/blob/master/Global/Vagrant.gitignore
-    - https://github.com/github/gitignore/blob/master/Global/VirtualEnv.gitignore
-    - https://github.com/github/gitignore/blob/master/Global/vim.gitignore
-
-
----
-## Thanks
-
- - [@dave-tucker](https://github.com/dave-tucker/dotfiles) - Initial inspiration, although I totally rebooted my dotfiles several times since then
- - [@chriskempson](https://github.com/chriskempson/base16) - for base16
- - [@sorin-ionescu](https://github.com/sorin-ionescu/prezto) - for prezto
- - [@skwp](https://github.com/skwp/dotfiles) - another inspiration dotfiles repo
- - [@mathiasbyens](https://github.com/mathiasbynens/dotfiles) - for his awesome osx customization script
-
----
 ## License
 
-Copyright 2015 Jeff Widman
+Copyright 2021 Ignacio Rivas
 Licensed under the MIT License
