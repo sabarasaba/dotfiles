@@ -1,35 +1,26 @@
-export PS1="\[\033[36m\]\u\[\033[m\]@\[\033[32m\]\h:\[\033[33;1m\]\w\[\033[m\]\$ "
+export LANG=C
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
 export NODE_OPTIONS="--max_old_space_size=2048"
+export GPG_TTY=$(tty)
+export BASH_SILENCE_DEPRECATION_WARNING=1
+export PATH=~/.npm-global/bin:$PATH
 
 unset use_color safe_term match_lhs sh
 
-complete -cf sudo
-
-# Bash won't get SIGWINCH if another process is in the foreground.
-# Enable checkwinsize so that bash will check the terminal size when
-# it regains control.  #65623
-# http://cnswww.cns.cwru.edu/~chet/bash/FAQ (E11)
-shopt -s checkwinsize
-shopt -s expand_aliases
-
-# Enable history appending instead of overwriting.  #139609
-shopt -s histappend
-shopt -s checkwinsize
-shopt -s expand_aliases
+# complete -cf sudo
 
 # Typo fixer for cd..
-shopt -s cdspell
+# shopt -s cdspell
 # Case insensitive cd.
-bind 'set completion-ignore-case on'
+# bind 'set completion-ignore-case on'
 
 # CTRL-z bring back fg task
-stty susp undef
+# stty susp undef
 # bind '"\C-z": "fg\015"'
-bind -x '"\C-z"':"fg"
+# bind -x '"\C-z"':"fg"
 
-export FZF_DEFAULT_COMMAND='rg --files --follow --hidden'
+export FZF_DEFAULT_COMMAND='rg --files --follow --hidden -g "!.git"'
 # export FZF_DEFAULT_COMMAND='ag --ignore-dir node_modules --ignore-case -g ""'
 
 export EDITOR=vim
@@ -43,6 +34,7 @@ alias ll='ls -lah'
 alias l='ls -lh'
 alias calc='bc -l'
 alias mkdir='mkdir -pv'
+alias tmux="TERM=screen-256color-bce tmux -u"
 
 alias gd="git diff"
 alias gl="git lg"
@@ -61,6 +53,6 @@ alias gbc="git rev-parse --abbrev-ref HEAD | pbcopy"
 
 # Sourcing
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
-#[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-source ~/.config/bash/bash-powerline.sh
+[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+source ~/.config/bash/bash-powerline.bash
 source ~/.config/bash/git-completion.bash

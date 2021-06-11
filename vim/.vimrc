@@ -1,13 +1,16 @@
 " set the runtime path to include vim-plug and initialize
 call plug#begin('~/.vim/plugged')
 
+Plug 'pangloss/vim-javascript'    " JavaScript support
+Plug 'leafgarland/typescript-vim' " TypeScript syntax
+Plug 'maxmellon/vim-jsx-pretty'   " JS and JSX syntax
+
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
-Plug 'sheerun/vim-polyglot'
-Plug 'pantharshit00/vim-prisma'
+Plug 'rakr/vim-one'
+"Plug 'sheerun/vim-polyglot'
 Plug 'mileszs/ack.vim'
 Plug 'rking/ag.vim'
-Plug 'dense-analysis/ale'
 Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-unimpaired'
@@ -25,29 +28,27 @@ Plug 'vimwiki/vimwiki'
 Plug 'nelstrom/vim-visual-star-search'
 set rtp+=/usr/local/opt/fzf
 Plug 'junegunn/fzf.vim'
-"Plug 'SirVer/ultisnips'
+Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
-" Plug 'Valloric/MatchTagAlways'
-" Plug 'easymotion/vim-easymotion'
+Plug 'Valloric/MatchTagAlways'
+Plug 'easymotion/vim-easymotion'
 " Plug 'vitalk/vim-simple-todo'
-" Plug 'AndrewRadev/splitjoin.vim'
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'AndrewRadev/splitjoin.vim'
 
 " All of your Plugins must be added before the following line
 call plug#end()
 filetype plugin indent on
 
+let g:coc_global_extensions = [ 'coc-tsserver' ]
 
 " Enable spellchecking for Markdown files and git commit messages
 autocmd FileType markdown setlocal spell
 autocmd FileType wiki setlocal spell
 autocmd FileType gitcommit setlocal spell
-autocmd FileType css,less,pss,sss set omnifunc=csscomplete#CompleteCSS
+autocmd FileType css,less,scss set omnifunc=csscomplete#CompleteCSS
 autocmd BufNewFile,BufRead *.css   set syntax=css
 autocmd BufRead,BufNewFile *.conf setfiletype conf
-au BufRead,BufNewFile *.pss setfiletype css
-au BufRead,BufNewFile *.sss setfiletype css
 
 " Theme
 if (has("termguicolors"))
@@ -60,8 +61,9 @@ syntax on
 set t_Co=256
 set ttyfast
 set cursorline
-colorscheme onehalfdark
-
+set background=dark
+"colorscheme onehalfdark
+colorscheme one
 
 set laststatus=2
 set number            " Show line numbers
@@ -85,8 +87,8 @@ set clipboard=unnamed
 
 
 " Custom visual cues
-hi Visual cterm=NONE ctermbg=White ctermfg=Black
-hi Search ctermfg=Yellow ctermbg=NONE guifg=wheat guibg=red cterm=bold,underline
+"hi Visual cterm=NONE ctermbg=White ctermfg=Black
+"hi Search ctermfg=Yellow ctermbg=NONE guifg=wheat guibg=red cterm=bold,underline
 hi MatchTag ctermfg=black ctermbg=lightgreen guifg=black guibg=lightgreen
 
 " Comments should be italic
@@ -181,7 +183,7 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " Emmet setup
 let g:user_emmet_expandabbr_key = '<c-j>'
 let g:user_emmet_settings = { 'indentation' : ' ' }
-imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+"imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 
 let g:user_emmet_settings = {
 \  'javascript.jsx' : {
@@ -207,8 +209,9 @@ let g:ale_lint_on_insert_leave = 0
 " nnoremap \ :Rg<ENTER>
 " let g:fzf_preview_window = ''
 if executable('ag')
-  let g:ackprg = 'ag --ignore-case --ignore yarn.lock --ignore-dir node_modules --vimgrep'
+  let g:ackprg = 'ag --ignore-case --ignore yarn.lock --ignore-dir node_modules,.git --vimgrep --word-regexp'
 endif
+
 nnoremap \ :Ack<SPACE>
 
 " Setup ultisnips and use tab as a completition key
@@ -216,3 +219,17 @@ let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsSnippetDirectories=["~/.vim/custom_snippets"]
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+" Remap keys for applying codeAction to the current line.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
